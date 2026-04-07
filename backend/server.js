@@ -42,7 +42,7 @@ app.post("/chat", async (req, res) => {
     console.log("ERROR:", error.response?.data || error.message);
 
     res.json({
-      reply: "OpenRouter error ❌",
+      reply: "OpenRouter error ",
     });
   }
 });
