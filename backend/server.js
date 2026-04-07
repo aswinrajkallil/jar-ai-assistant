@@ -1,25 +1,20 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
 import axios from "axios";
-import chatConfig from "./chatConfig.js"; // 👈 add this
+import chatConfig from "../chatConfig.js"; // adjust path if needed
 
-dotenv.config();
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
+  }
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-app.post("/chat", async (req, res) => {
   try {
     const userMessage = req.body.message || "Hello";
 
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
-        model: chatConfig.model, // 👈 use config
+        model: chatConfig.model,
         messages: [
-          { role: "system", content: chatConfig.systemPrompt }, // 👈 use config
+          { role: "system", content: chatConfig.systemPrompt },
           { role: "user", content: userMessage },
         ],
       },
@@ -27,7 +22,7 @@ app.post("/chat", async (req, res) => {
         headers: {
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": "http://localhost:5173",
+          "HTTP-Referer": "https://your-domain.vercel.app", // 🔥 change this
           "X-Title": "Aswin Chatbot",
         },
       }
@@ -36,17 +31,13 @@ app.post("/chat", async (req, res) => {
     const reply =
       response.data?.choices?.[0]?.message?.content || "No response";
 
-    res.json({ reply });
+    return res.status(200).json({ reply });
 
   } catch (error) {
     console.log("ERROR:", error.response?.data || error.message);
 
-    res.json({
-      reply: "OpenRouter error ",
+    return res.status(500).json({
+      reply: "OpenRouter error",
     });
   }
-});
-
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
-});
+}
