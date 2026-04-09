@@ -106,7 +106,7 @@ Only talk about Aswin.
   model: "deepseek/deepseek-chat",
 
   headers: {
-    "https://your-vercel-domain.vercel.app";
+    "HTTP-Referer": "https://your-vercel-domain.vercel.app",
     "X-Title": "Aswin Chatbot",
   },
 };

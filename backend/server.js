@@ -1,5 +1,5 @@
 import axios from "axios";
-import chatConfig from "../chatConfig.js"; // adjust path if needed
+import chatConfig from "./chatConfig.js"; // adjust path if needed
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
